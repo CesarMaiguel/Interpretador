@@ -18,14 +18,14 @@ SOURCES += main.cpp\
     goto.cpp \
     cfgdata.cpp \
     configfile.cpp \
-    plaintext.cpp
+    codeeditor.cpp
 
 HEADERS  += mainwindow.h \
     searchreplacedialog.h \
     goto.h \
     cfgdata.h \
     configfile.h \
-    plaintext.h
+    codeeditor.h
 
 FORMS    += mainwindow.ui \
     searchreplacedialog.ui \

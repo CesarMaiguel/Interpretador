@@ -24,7 +24,6 @@ public slots:
     void selectFont();
     void statusBar(bool);
     void cursorPos();
-    void wordWrap(bool);
     void copy();
     void cut();
     void paste();

@@ -45,7 +45,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionFuente,SIGNAL(triggered(bool)),this,SLOT(selectFont()));
     connect(ui->plainTextEdit,SIGNAL(cursorPositionChanged()),this,SLOT(cursorPos()));
     connect(ui->actionBarra_de_estado,SIGNAL(triggered(bool)),this,SLOT(statusBar(bool)));
-    connect(ui->actionAjuste_de_linea,SIGNAL(triggered(bool)),this,SLOT(wordWrap(bool)));
     connect(ui->actionBuscar,SIGNAL(triggered(bool)),rd,SLOT(showSearch()));
     connect(ui->actionBuscar_siguiente,SIGNAL(triggered(bool)),rd,SLOT(search()));
     connect(ui->actionReemplazar,SIGNAL(triggered(bool)),rd,SLOT(showReplace()));
@@ -227,21 +226,6 @@ void MainWindow::cursorPos(){
     statusBarLabel->setText("Linea "+QString::number(x+1)+", columna "+QString::number(y+1));
 }
 
-void MainWindow::wordWrap(bool wordWrap){
-    if(wordWrap){
-        ui->plainTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
-        ui->plainTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        ui->plainTextEdit->moveCursor(QTextCursor::Start);
-        cfg->createOrModify("WordWrap","1");
-    }else{
-        ui->plainTextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
-        ui->plainTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        ui->plainTextEdit->moveCursor(QTextCursor::Start);
-        cfg->createOrModify("WordWrap","0");
-    }
-    cfg->save();
-}
-
 void MainWindow::copy(){
     ui->plainTextEdit->copy();
 }
@@ -340,17 +324,6 @@ void MainWindow::loadCfg(QString configFile){
     }else if(cData->value()=="1"){
         ui->statusBar->setVisible(true);
         ui->actionBarra_de_estado->setChecked(true);
-    }
-
-    cData = cfg->findByName("WordWrap");
-    if(cData==0||cData->value()=="0"){
-        ui->plainTextEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
-        ui->plainTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        ui->actionAjuste_de_linea->setChecked(false);
-    }else if(cData->value()=="1"){
-        ui->plainTextEdit->setLineWrapMode(QPlainTextEdit::WidgetWidth);
-        ui->plainTextEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        ui->actionAjuste_de_linea->setChecked(true);
     }
 
     cData = cfg->findByName("RecentDir");
