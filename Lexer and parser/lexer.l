@@ -25,7 +25,7 @@ boleano "true"|"false"
 "["					{return ('[');}
 "]"					{return (']');}
 "si"					{return IF;}
-"otra_condi"				{return IFELSE;}
+"sino_si"				{return ELSEIF;}
 "sino"					{return ELSE;}
 "main"					{return MAIN;}
 "integer"				{return ITGR;}
@@ -52,7 +52,7 @@ boleano "true"|"false"
 {boleano}				{return BOLEANO;}
 "\""({digito}|{caracter}|" ")*"\""	{return CADENA;}
 {caracter}({caracter}|(digito))*	{return NOMBRECAMPO;}
-.					{printf("ERROR EN LA LINEA: %d\n",yylineno);}
+.					{printf("Error en la linea: %d\n",yylineno);}
 
 
 %%
@@ -66,13 +66,21 @@ int main(void)
 {
 char nombreArchivo[50];
 printf("Nombre del archivo: ");
-gets(nombreArchivo);
+scanf("%s",&nombreArchivo);
 yyin = fopen(nombreArchivo, "rt");
 if(yyin == NULL){
-printf("\nNo se puede leer el archivo\n ");
+printf("\nNo se puede leer el archivo\n");
 }
 else{
-    yyparse();
+
+    int successfull = yyparse();
+
+    if(successfull==0){
+        printf("Compilation successfully!\n");
+        printf("-------------------------\n");
+        printf("- Errors: 0\n");
+        printf("- Warnings: 0\n");
+    }
 }
 
 fclose(yyin);

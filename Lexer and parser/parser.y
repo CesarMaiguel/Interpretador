@@ -27,7 +27,7 @@ int yystopparser = 0;
 %token DIFERENTE
 %token IF
 %token ELSE
-%token IFELSE 
+%token ELSEIF 
 %token FOR 
 %token WHILE
 
@@ -66,7 +66,7 @@ condicion		:	valor condicional valor | valor condicional NOMBRECAMPO | NOMBRECAM
 condicional		:	MAYOR | MENOR | IGUAL | MAYORIGUAL | MENORIGUAL | DIFERENTE;
 condicionno		:	ELSE '{' lineascodigos '}';
 condicionessino		:	condicionessino condicionsino | condicionsino;
-condicionsino		:	IFELSE '(' condicion ')' '{' lineascodigos '}';
+condicionsino		:	ELSEIF '(' condicion ')' '{' lineascodigos '}';
 ciclofor		:	FOR '(' iniciafor ';' condicion ';' incredisminvariable ')' '{' lineascodigos '}';
 iniciafor		:	tipodato NOMBRECAMPO asignarvalor;
 ciclowhile		:	WHILE '(' condicion ')' '{' lineascodigos '}';

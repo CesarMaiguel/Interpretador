@@ -70,7 +70,7 @@ extern int yydebug;
     DIFERENTE = 280,
     IF = 281,
     ELSE = 282,
-    IFELSE = 283,
+    ELSEIF = 283,
     FOR = 284,
     WHILE = 285
   };

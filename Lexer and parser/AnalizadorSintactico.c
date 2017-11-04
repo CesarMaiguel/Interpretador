@@ -126,7 +126,7 @@ extern int yydebug;
     DIFERENTE = 280,
     IF = 281,
     ELSE = 282,
-    IFELSE = 283,
+    ELSEIF = 283,
     FOR = 284,
     WHILE = 285
   };
@@ -469,7 +469,7 @@ static const char *const yytname[] =
   "DECIMAL", "BOLEANO", "CADENA", "ITGR", "DOU", "T_F", "TEXT",
   "ASIGNADOR", "SUMA", "RESTA", "MULTIPLICACION", "DIVISION", "AUMENTAR",
   "DISMINUIR", "MAYOR", "MENOR", "IGUAL", "MAYORIGUAL", "MENORIGUAL",
-  "DIFERENTE", "IF", "ELSE", "IFELSE", "FOR", "WHILE", "'('", "')'", "'{'",
+  "DIFERENTE", "IF", "ELSE", "ELSEIF", "FOR", "WHILE", "'('", "')'", "'{'",
   "'}'", "';'", "','", "$accept", "begin", "principal", "lineascodigos",
   "lineacodigo", "linea", "invocarmetodo", "parametrosenvio", "parenvio",
   "penvio", "valor", "crearvariable", "tipodato", "asignarvalor",
