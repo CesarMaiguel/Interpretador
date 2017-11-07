@@ -51,7 +51,7 @@ bool SearchReplaceDialog::search(bool noMsg){
         success = true;
     }else{
         if(!noMsg){
-            QMessageBox msg(QMessageBox::Information,"Notes","No se encontro \""+ui->lineEdit->text()+"\"",QMessageBox::Ok,this);
+            QMessageBox msg(QMessageBox::Information,"Interpreter","No se encontro \""+ui->lineEdit->text()+"\"",QMessageBox::Ok,this);
             msg.exec();
         }
     }
@@ -80,7 +80,7 @@ void SearchReplaceDialog::replaceAll(){
         text->textCursor().insertText(ui->lineEdit_2->text());
     }
     if(!success){
-        QMessageBox msg(QMessageBox::Information,"Notes","No se encontro \""+ui->lineEdit->text()+"\"",QMessageBox::Ok,this);
+        QMessageBox msg(QMessageBox::Information,"Interpreter","No se encontro \""+ui->lineEdit->text()+"\"",QMessageBox::Ok,this);
         msg.exec();
     }
 }

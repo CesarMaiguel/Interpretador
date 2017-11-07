@@ -9,6 +9,9 @@
 #include <QMessageBox>
 #include <QMimeData>
 
+extern void setTextEditError(QPlainTextEdit* edit1);
+extern int parse_string(const char* in);
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -44,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionGuardar_como,SIGNAL(triggered(bool)),this,SLOT(saveAs()));
     connect(ui->actionFuente,SIGNAL(triggered(bool)),this,SLOT(selectFont()));
     connect(ui->plainTextEdit,SIGNAL(cursorPositionChanged()),this,SLOT(cursorPos()));
+    connect(ui->actionEvaluar,SIGNAL(triggered(bool)),this,SLOT(evaluate()));
     connect(ui->actionBarra_de_estado,SIGNAL(triggered(bool)),this,SLOT(statusBar(bool)));
     connect(ui->actionBuscar,SIGNAL(triggered(bool)),rd,SLOT(showSearch()));
     connect(ui->actionBuscar_siguiente,SIGNAL(triggered(bool)),rd,SLOT(search()));
@@ -62,10 +66,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->plainTextEdit,SIGNAL(dropEventSignal(QString)),this,SLOT(dropEventOpen(QString)));
 }
 
+void MainWindow::evaluate()
+{
+    setTextEditError(ui->plainTextEdit_2);
+    parse_string(ui->plainTextEdit->toPlainText().toLocal8Bit().constData());
+}
+
 void MainWindow::newFile(){
     bool newFile = true;
     if(!isSaved){
-        QMessageBox msg(QMessageBox::Question,tr("Notes"),"¿Desea guardar los cambios hechos a \""+fileName+"\"?\n",
+        QMessageBox msg(QMessageBox::Question,tr("Interpreter"),"¿Desea guardar los cambios hechos a \""+fileName+"\"?\n",
                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,this);
 
         msg.setButtonText(QMessageBox::Cancel,"Cancelar");
@@ -82,7 +92,7 @@ void MainWindow::newFile(){
     if(newFile){
         filePath = "";
         fileName = "sin titulo";
-        this->setWindowTitle("Notes: "+fileName);
+        this->setWindowTitle("Interpreter: "+fileName);
         ui->plainTextEdit->setPlainText("");
         isSaved = true;
     }
@@ -92,7 +102,7 @@ bool MainWindow::openFile(QString filePath){
 
     bool openFile = true;
     if(!isSaved){
-        QMessageBox msg(QMessageBox::Question,tr("Notes"),"¿Desea guardar los cambios hechos a \""+fileName+"\"?\n",
+        QMessageBox msg(QMessageBox::Question,tr("Interpreter"),"¿Desea guardar los cambios hechos a \""+fileName+"\"?\n",
                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,this);
 
         msg.setButtonText(QMessageBox::Cancel,"Cancelar");
@@ -143,7 +153,7 @@ bool MainWindow::openFile(QString filePath){
     }
     ui->plainTextEdit->document()->setPlainText(inTxt);
     f.close();
-    this->setWindowTitle("Notes: "+fileName);
+    this->setWindowTitle("Interpreter: "+fileName);
     isSaved = true;
     return true;
 }
@@ -191,7 +201,7 @@ bool MainWindow::saveAs(){
     out<<outTxt;
     f.close();
 
-    this->setWindowTitle("Notes: "+fileName);
+    this->setWindowTitle("Interpreter: "+fileName);
     return isSaved = true;
 
 }
@@ -278,7 +288,7 @@ void MainWindow::switchMenuDocIsEmpty(){
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if(!isSaved){
-        QMessageBox msg(QMessageBox::Question,tr("Notes"),"¿Desea guardar los cambios hechos a \""+fileName+"\"?\n",
+        QMessageBox msg(QMessageBox::Question,tr("Interpreter"),"¿Desea guardar los cambios hechos a \""+fileName+"\"?\n",
                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,this);
 
         msg.setButtonText(QMessageBox::Cancel,"Cancelar");

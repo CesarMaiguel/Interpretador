@@ -59,7 +59,7 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
 int CodeEditor::lineNumberAreaWidth()
 {
-    return 25;
+    return 35;
 }
 
 

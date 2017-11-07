@@ -144,6 +144,8 @@
     <addaction name="actionDeshacer"/>
     <addaction name="actionRehacer"/>
     <addaction name="separator"/>
+    <addaction name="actionEvaluar"/>
+    <addaction name="separator"/>
     <addaction name="actionCortar"/>
     <addaction name="actionCopiar"/>
     <addaction name="actionPegar"/>
@@ -343,6 +345,14 @@
    </property>
    <property name="text">
     <string>Resultados</string>
+   </property>
+  </action>
+  <action name="actionEvaluar">
+   <property name="text">
+    <string>Evaluar</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

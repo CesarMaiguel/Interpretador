@@ -18,15 +18,24 @@ SOURCES += main.cpp\
     goto.cpp \
     cfgdata.cpp \
     configfile.cpp \
-    codeeditor.cpp
+    codeeditor.cpp \
+    lexer.cpp \
+    parser.cpp
 
 HEADERS  += mainwindow.h \
     searchreplacedialog.h \
     goto.h \
     cfgdata.h \
     configfile.h \
-    codeeditor.h
+    codeeditor.h \
+    lexer.h \
+    parser.h
+
+
 
 FORMS    += mainwindow.ui \
     searchreplacedialog.ui \
     goto.ui
+
+OTHER_FILES += lexer.l \
+    parser.y
