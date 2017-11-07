@@ -1,13 +1,14 @@
 %option noyywrap
 %{
 #include "parser.h"
-#include <iostream>
 #include <QString>
 #include <QPlainTextEdit>
 int lines =1;
+int errorLine = 1;
 QPlainTextEdit* error;
+int errorLineNumber(){return errorLine;};
 void setTextEditError(QPlainTextEdit* edit1)   {lines=1; error=edit1; }
-void printError(QString val){error->appendPlainText(val);}
+void printError(QString val){error->appendPlainText(val); errorLine=lines;}
 %}
 
 ignore " "|\t|\r
@@ -28,16 +29,19 @@ boleano "true"|"false"
 ")"					{return (')');}
 "["					{return ('[');}
 "]"					{return (']');}
+"#"					{return ('#');}
 "si"					{return IF;}
-"otra_condi"				{return IFELSE;}
+"sino_si"				{return ELSEIF;}
 "sino"					{return ELSE;}
-"main"					{return MAIN;}
+"inicio"				{return INICIO;}
 "integer"				{return ITGR;}
 "decimal"				{return DOU;}
 "bool"					{return T_F;}
 "text"					{return TEXT;}
 "para"					{return FOR;}
 "mientras"				{return WHILE;}
+"imprimir"				{return IMPRIMIR;}
+"leer"					{return LEER;}
 "+"					{return SUMA;}
 "-"					{return RESTA;}
 "*"					{return MULTIPLICACION;}
@@ -55,8 +59,8 @@ boleano "true"|"false"
 {digito}+"."{digito}			{return DECIMAL;}
 {boleano}				{return BOLEANO;}
 "\""({digito}|{caracter}|" ")*"\""	{return CADENA;}
-{caracter}({caracter}|(digito))*	{return NOMBRECAMPO;}
-.					{printError(QString("Error Lexico en la linea: %1, en %2").arg(lines).arg(yytext));}
+{caracter}({caracter}|(digito))*	{return NOMBREVARIABLE;}
+.					{printError(QString("Error Lexico en la linea: %1, en %2").arg(lines).arg(yytext)); }
 
 %%
 

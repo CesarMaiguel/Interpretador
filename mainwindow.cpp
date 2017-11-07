@@ -8,9 +8,11 @@
 #include <goto.h>
 #include <QMessageBox>
 #include <QMimeData>
+#include <QTextBlock>
 
 extern void setTextEditError(QPlainTextEdit* edit1);
 extern int parse_string(const char* in);
+extern int errorLineNumber();
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -20,9 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     isSaved = true;
-    int x = ui->plainTextEdit->textCursor().blockNumber();
-    int y = ui->plainTextEdit->textCursor().positionInBlock();
-    statusBarLabel = new QLabel("Linea "+QString::number(x+1)+", columna "+QString::number(y+1));
+    int y = ui->plainTextEdit->textCursor().blockNumber();
+    int x = ui->plainTextEdit->textCursor().positionInBlock();
+    statusBarLabel = new QLabel("Linea "+QString::number(y+1)+", columna "+QString::number(x+1));
     SearchReplaceDialog *rd = new SearchReplaceDialog(this,ui->plainTextEdit);
     GoTo *gd = new GoTo(this,ui->plainTextEdit);
 
@@ -49,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->plainTextEdit,SIGNAL(cursorPositionChanged()),this,SLOT(cursorPos()));
     connect(ui->actionEvaluar,SIGNAL(triggered(bool)),this,SLOT(evaluate()));
     connect(ui->actionBarra_de_estado,SIGNAL(triggered(bool)),this,SLOT(statusBar(bool)));
+    connect(ui->actionResultados,SIGNAL(triggered(bool)),this,SLOT(resultsBox(bool)));
     connect(ui->actionBuscar,SIGNAL(triggered(bool)),rd,SLOT(showSearch()));
     connect(ui->actionBuscar_siguiente,SIGNAL(triggered(bool)),rd,SLOT(search()));
     connect(ui->actionReemplazar,SIGNAL(triggered(bool)),rd,SLOT(showReplace()));
@@ -68,8 +71,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::evaluate()
 {
+    ui->plainTextEdit_2->clear();
     setTextEditError(ui->plainTextEdit_2);
     parse_string(ui->plainTextEdit->toPlainText().toLocal8Bit().constData());
+    bool haveError = !ui->plainTextEdit_2->document()->isEmpty();
+    if(haveError){
+        QTextCursor cursor(ui->plainTextEdit->document()->findBlockByLineNumber(errorLineNumber()-1));
+        ui->plainTextEdit->setTextCursor(cursor);
+    }else{
+        ui->plainTextEdit_2->setPlainText("No se han encontrado errores.");
+    }
+
+
 }
 
 void MainWindow::newFile(){
@@ -230,6 +243,11 @@ void MainWindow::statusBar(bool statusBarVisible){
     cfg->save();
 }
 
+void MainWindow::resultsBox(bool resultsBoxVisible)
+{
+    ui->plainTextEdit_2->setVisible(resultsBoxVisible);
+}
+
 void MainWindow::cursorPos(){
     qint32 x = ui->plainTextEdit->textCursor().blockNumber();
     qint32 y = ui->plainTextEdit->textCursor().positionInBlock();
@@ -277,9 +295,13 @@ void MainWindow::switchFindNextAction(bool searchAvailable){
     ui->actionBuscar_siguiente->setDisabled(!searchAvailable);
 }
 
-void MainWindow::switchMenuDocIsEmpty(){
-    isSaved = false;
+void MainWindow::switchMenuDocIsEmpty(){ 
     bool isEmpty = ui->plainTextEdit->document()->isEmpty();
+    if(isEmpty){
+        isSaved = true;
+    }else{
+        isSaved = false;
+    }
     ui->actionIr_a->setDisabled(isEmpty);
     ui->actionBuscar->setDisabled(isEmpty);
     ui->actionReemplazar->setDisabled(isEmpty);
@@ -321,7 +343,7 @@ void MainWindow::loadCfg(QString configFile){
     CfgData *cData = cfg->findByName("Font");
 
     if(cData==0){
-        font = QFont("Consolas",11);
+        font = QFont("Courier",10);
     }else{
         font.fromString(cData->value());
     }

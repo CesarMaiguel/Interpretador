@@ -1,6 +1,5 @@
 %{
 #include "lexer.h"
-#include <iostream>
 #include <QString>
 extern int lines;
 extern char *yytext;
@@ -13,9 +12,11 @@ int yyerror(const char* mens)
 %}
 
 
-%token MAIN 
-%token NOMBRECAMPO 
+%token INICIO 
+%token NOMBREVARIABLE
 %token ENTERO 
+%token IMPRIMIR
+%token LEER
 %token DECIMAL 
 %token BOLEANO 
 %token CADENA 
@@ -38,55 +39,57 @@ int yyerror(const char* mens)
 %token DIFERENTE
 %token IF
 %token ELSE
-%token IFELSE 
+%token ELSEIF 
 %token FOR 
 %token WHILE
 
 
-%start begin
+%start inicio
 
 %%
 
-begin           :   principal funciones | principal;
-principal       :   MAIN '(' ')' '{' lineascodigos '}';
-lineascodigos       :   lineacodigo | ;
-lineacodigo     :   lineacodigo linea | linea;
-linea           :   invocarmetodo ';' | crearvariable ';' | cambiarvalor ';' | ciclocondicion;
-invocarmetodo       :   NOMBRECAMPO '(' parametrosenvio ')';
-parametrosenvio     :   parenvio | ;
-parenvio        :   parenvio ',' penvio | penvio;
-penvio          :   valor | NOMBRECAMPO;
-valor           :   ENTERO | DECIMAL | BOLEANO | CADENA; 
-crearvariable       :   tipodato NOMBRECAMPO | tipodato NOMBRECAMPO asignarvalor;
-tipodato        :   ITGR | DOU | T_F | TEXT;
-asignarvalor        :   ASIGNADOR operasignacion | ASIGNADOR valor | ASIGNADOR NOMBRECAMPO;
-operasignacion      :   aritmetica | invocarmetodo | incredisminvariable;
-aritmetica      :   oprcomun | oprcomun oprcomplemento;
-oprcomun        :   valor tipoopr valor | valor tipoopr NOMBRECAMPO | NOMBRECAMPO tipoopr valor | NOMBRECAMPO tipoopr NOMBRECAMPO;
-tipoopr         :   SUMA | RESTA | MULTIPLICACION | DIVISION;
-oprcomplemento      :   oprcomplemento oprcom | oprcom;
-oprcom          :   tipoopr valor | tipoopr NOMBRECAMPO;
-incredisminvariable :   NOMBRECAMPO indis;
-indis           :   AUMENTAR | DISMINUIR;
-cambiarvalor        :   NOMBRECAMPO ASIGNADOR cambvalor;
-cambvalor       :   valor | operasignacion | NOMBRECAMPO;
-ciclocondicion      :   ifcondicion | ciclofor | ciclowhile;
-ifcondicion     :   condicionsi | condicionsi condicionno | condicionsi condicionessino condicionno;
-condicionsi     :   IF '(' condicion ')' '{' lineascodigos '}';
-condicion       :   valor condicional valor | valor condicional NOMBRECAMPO | NOMBRECAMPO condicional valor | NOMBRECAMPO condicional NOMBRECAMPO;
-condicional     :   MAYOR | MENOR | IGUAL | MAYORIGUAL | MENORIGUAL | DIFERENTE;
-condicionno     :   ELSE '{' lineascodigos '}';
-condicionessino     :   condicionessino condicionsino | condicionsino;
-condicionsino       :   IFELSE '(' condicion ')' '{' lineascodigos '}';
-ciclofor        :   FOR '(' iniciafor ';' condicion ';' incredisminvariable ')' '{' lineascodigos '}';
-iniciafor       :   tipodato NOMBRECAMPO asignarvalor;
-ciclowhile      :   WHILE '(' condicion ')' '{' lineascodigos '}';
-funciones       :   funciones funcion | funcion;
-funcion         :   tiporetorno NOMBRECAMPO '(' parametrosentrada ')' '{' lineascodigos '}';
-tiporetorno     :   tipodato;
-parametrosentrada   :   parametros;
-parametros      :   parametros ',' parametro | parametro;
-parametro       :   tipodato NOMBRECAMPO;
+inicio			:	principal funciones | principal;
+principal		: 	INICIO '(' ')' '{' lineascodigos '}';
+lineascodigos		: 	lineacodigo | ;
+lineacodigo		:	lineacodigo linea | linea;
+linea			:	invocarmetodo ';' | crearvariable ';' | cambiarvalor ';' | ciclo_condicion | imprimir ';'| leer ';' ;
+imprimir 		:	IMPRIMIR '(' CADENA ')';
+leer			:	LEER '#' NOMBREVARIABLE;
+invocarmetodo		:	NOMBREVARIABLE '(' enviar_parametros ')';
+enviar_parametros	:	enviaparametros | ;
+enviaparametros		:	enviaparametros ',' envia_paramtro | envia_paramtro;
+envia_paramtro		:	valor | NOMBREVARIABLE;
+valor			:	ENTERO | DECIMAL | BOLEANO | CADENA;  
+crearvariable		:	tipodato NOMBREVARIABLE | tipodato NOMBREVARIABLE asignarvalor;
+tipodato		:	ITGR | DOU | T_F | TEXT;
+asignarvalor		:	ASIGNADOR operacion_asignacion | ASIGNADOR valor | ASIGNADOR NOMBREVARIABLE;
+operacion_asignacion	:	aritmetica | invocarmetodo | incre_dismin_variable;
+aritmetica		:	operacion_comun | operacion_comun operacion_complemento;
+operacion_comun		:	valor tipo_operacion valor | valor tipo_operacion NOMBREVARIABLE | NOMBREVARIABLE tipo_operacion valor | NOMBREVARIABLE tipo_operacion NOMBREVARIABLE;
+tipo_operacion		:	SUMA | RESTA | MULTIPLICACION | DIVISION;
+operacion_complemento	:	operacion_complemento operacion_complemto | operacion_complemto;
+operacion_complemto	:	tipo_operacion valor | tipo_operacion NOMBREVARIABLE;
+incre_dismin_variable	:	NOMBREVARIABLE incre_dismin;
+incre_dismin		:	AUMENTAR | DISMINUIR;
+cambiarvalor		:	NOMBREVARIABLE ASIGNADOR cambio_valor;
+cambio_valor		:	valor | operacion_asignacion | NOMBREVARIABLE;
+ciclo_condicion		:	ifcondicion | ciclofor | ciclowhile;
+ifcondicion		:	condicion_si | condicion_si condicion_no | condicion_si condiciones_sino condicion_no;
+condicion_si		:	IF '(' condicion ')' '{' lineascodigos '}';
+condicion		:	valor condicional valor | valor condicional NOMBREVARIABLE | NOMBREVARIABLE condicional valor | NOMBREVARIABLE condicional NOMBREVARIABLE;
+condicional		:	MAYOR | MENOR | IGUAL | MAYORIGUAL | MENORIGUAL | DIFERENTE;
+condicion_no		:	ELSE '{' lineascodigos '}';
+condiciones_sino	:	condiciones_sino condicion_sino | condicion_sino;
+condicion_sino		:	ELSEIF '(' condicion ')' '{' lineascodigos '}';
+ciclofor		:	FOR '(' inicia_for ';' condicion ';' incre_dismin_variable ')' '{' lineascodigos '}';
+inicia_for		:	tipodato NOMBREVARIABLE asignarvalor;
+ciclowhile		:	WHILE '(' condicion ')' '{' lineascodigos '}';
+funciones		:	funciones funcion | funcion;
+funcion			:	tiporetorno NOMBREVARIABLE '(' parametrosentrada ')' '{' lineascodigos '}';
+tiporetorno		:	tipodato;
+parametrosentrada	:	parametros;
+parametros		:	parametros ',' parametro | parametro;
+parametro		:	tipodato NOMBREVARIABLE;
 
 %%
 

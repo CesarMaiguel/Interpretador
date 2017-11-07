@@ -23,6 +23,7 @@ public slots:
     bool saveAs();
     void selectFont();
     void statusBar(bool);
+    void resultsBox(bool);
     void cursorPos();
     void evaluate();
     void copy();

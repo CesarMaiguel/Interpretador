@@ -188,6 +188,9 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
+   <property name="sizeGripEnabled">
+    <bool>true</bool>
+   </property>
   </widget>
   <action name="actionNuevo">
    <property name="text">
@@ -341,6 +344,9 @@
   </action>
   <action name="actionResultados">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="text">
