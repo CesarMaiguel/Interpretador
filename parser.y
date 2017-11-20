@@ -6,7 +6,7 @@ extern char *yytext;
 extern void printError(QString val);
 int yyerror(const char* mens)
 {
-    printError(QString("Error Sintactico en la linea: %1, en %2").arg(lines).arg(yytext));
+    printError(QString("Error Sintactico en la linea: %1").arg(lines));
     return 0;
 }
 %}

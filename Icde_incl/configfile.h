@@ -5,7 +5,9 @@
 #include "cfgdata.h"
 #include <QFile>
 
-class ConfigFile : public QObject
+#include "icdelib_global.h"
+
+class ICDELIBSHARED_EXPORT ConfigFile : public QObject
 {
     Q_OBJECT
 

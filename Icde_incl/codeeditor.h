@@ -52,7 +52,9 @@ class QWidget;
 class LineNumberArea;
 
 
-class CodeEditor : public QPlainTextEdit
+#include "icdelib_global.h"
+
+class ICDELIBSHARED_EXPORT CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 

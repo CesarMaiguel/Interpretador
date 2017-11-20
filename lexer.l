@@ -60,7 +60,7 @@ boleano "true"|"false"
 {boleano}				{return BOLEANO;}
 "\""({digito}|{caracter}|" ")*"\""	{return CADENA;}
 {caracter}({caracter}|(digito))*	{return NOMBREVARIABLE;}
-.					{printError(QString("Error Lexico en la linea: %1, en %2").arg(lines).arg(yytext)); }
+.					{printError(QString("Error Lexico en la linea: %1").arg(lines)); }
 
 %%
 

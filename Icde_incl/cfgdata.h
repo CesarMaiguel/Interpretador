@@ -3,7 +3,9 @@
 
 #include <QObject>
 
-class CfgData : public QObject
+#include "icdelib_global.h"
+
+class ICDELIBSHARED_EXPORT CfgData : public QObject
 {
     Q_OBJECT
 public:

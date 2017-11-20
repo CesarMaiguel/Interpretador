@@ -1,1 +1,1 @@
-# Interpretador
+# interpreter
